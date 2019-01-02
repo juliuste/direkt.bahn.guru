@@ -1,0 +1,14 @@
+.DS_Store
+
+/.nvm-version
+/node_modules
+/npm-debug.log
+
+/yarn.lock
+/shrinkwrap.yaml
+/package-lock.json
+
+/dist
+
+/deploy
+/assets/bundle.js

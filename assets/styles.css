@@ -1,0 +1,10 @@
+body {
+	margin: 0; padding: 0;
+	background-color: #333;
+	font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
+
+.mapboxgl-popup {
+	max-width: 200px;
+	font: 14px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
