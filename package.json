@@ -19,6 +19,7 @@
 		"fetch-ponyfill": "^6.0.2",
 		"lodash": "^4.17.11",
 		"lodash.debounce": "^4.0.8",
+		"luxon": "^1.9.0",
 		"mapbox-gl": "^0.46.0",
 		"query-string": "^6.2.0",
 		"querystate": "^1.0.8",
