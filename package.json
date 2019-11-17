@@ -16,7 +16,6 @@
 	},
 	"dependencies": {
 		"acorn": "^7.1.0",
-		"db-stations": "^2.10.0",
 		"fetch-ponyfill": "^6.1.0",
 		"lodash": "^4.17.15",
 		"luxon": "^1.21.1",
