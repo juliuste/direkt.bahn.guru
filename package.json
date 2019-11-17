@@ -1,7 +1,7 @@
 {
 	"name": "direkt.bahn.guru",
-	"private": true,
 	"version": "0.0.0",
+	"private": true,
 	"homepage": "https://github.com/juliuste/direkt.bahn.guru",
 	"bugs": "https://github.com/juliuste/direkt.bahn.guru/issues",
 	"repository": "juliuste/direkt.bahn.guru",
@@ -30,15 +30,15 @@
 	},
 	"devDependencies": {
 		"browserify": "^16.2.2",
-		"depcheck": "^0.6.11",
-		"eslint": "^5.10.0",
-		"eslint-config-standard": "^12.0.0",
-		"eslint-plugin-import": "^2.14.0",
-		"eslint-plugin-node": "^8.0.0",
-		"eslint-plugin-promise": "^4.0.1",
-		"eslint-plugin-standard": "^4.0.0"
+		"depcheck": "^0.9.1",
+		"eslint": "^6.6.0",
+		"eslint-config-standard": "^14.1.0",
+		"eslint-plugin-import": "^2.18.2",
+		"eslint-plugin-node": "^10.0.0",
+		"eslint-plugin-promise": "^4.2.1",
+		"eslint-plugin-standard": "^4.0.1"
 	},
 	"engines": {
-		"node": ">=8"
+		"node": ">=10"
 	}
 }
