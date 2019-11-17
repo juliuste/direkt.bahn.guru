@@ -17,6 +17,7 @@
 	"dependencies": {
 		"acorn": "^7.1.0",
 		"fetch-ponyfill": "^6.1.0",
+		"is-uic-location-code": "0.0.1",
 		"lodash": "^4.17.15",
 		"luxon": "^1.21.1",
 		"mapbox-gl": "^1.5.0",

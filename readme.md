@@ -1,6 +1,6 @@
 # direkt.bahn.guru
 
-**[direkt.bahn.guru](https://direkt.bahn.guru/)** All direct long-distance railway connections for cities in Germany.
+**[direkt.bahn.guru](https://direkt.bahn.guru/)** All direct long-distance railway connections from a given city.
 
 [![Build Status](https://travis-ci.org/juliuste/direkt.bahn.guru.svg?branch=master)](https://travis-ci.org/juliuste/direkt.bahn.guru)
 [![license](https://img.shields.io/github/license/juliuste/direkt.bahn.guru.svg?style=flat)](license)
