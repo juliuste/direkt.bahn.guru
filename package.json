@@ -15,27 +15,27 @@
 		"test": "npm run lint && npm run check-deps && npm run build"
 	},
 	"dependencies": {
-		"acorn": "^7.1.0",
-		"fetch-ponyfill": "^6.1.0",
+		"acorn": "^7.4.1",
+		"fetch-ponyfill": "^6.1.1",
 		"is-uic-location-code": "0.0.1",
-		"lodash": "^4.17.15",
-		"luxon": "^1.21.1",
-		"mapbox-gl": "^1.5.0",
-		"query-string": "^6.9.0",
-		"querystate": "^1.0.8",
-		"suggestions": "^1.7.0",
-		"sweetalert2": "^9.3.11",
+		"lodash": "^4.17.20",
+		"luxon": "^1.25.0",
+		"mapbox-gl": "^1.13.0",
+		"query-string": "^6.13.8",
+		"querystate": "^1.0.9",
+		"suggestions": "^1.7.1",
+		"sweetalert2": "^9.17.2",
 		"xtend": "^4.0.2"
 	},
 	"devDependencies": {
-		"browserify": "^16.2.2",
-		"depcheck": "^0.9.1",
-		"eslint": "^6.6.0",
-		"eslint-config-standard": "^14.1.0",
-		"eslint-plugin-import": "^2.18.2",
+		"browserify": "^16.5.2",
+		"depcheck": "^0.9.2",
+		"eslint": "^6.8.0",
+		"eslint-config-standard": "^14.1.1",
+		"eslint-plugin-import": "^2.22.1",
 		"eslint-plugin-node": "^10.0.0",
 		"eslint-plugin-promise": "^4.2.1",
-		"eslint-plugin-standard": "^4.0.1"
+		"eslint-plugin-standard": "^4.1.0"
 	},
 	"engines": {
 		"node": ">=10"
