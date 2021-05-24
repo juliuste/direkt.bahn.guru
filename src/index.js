@@ -162,6 +162,7 @@ const selectLocation = async id => {
 					cancelButtonText: 'Abbrechen',
 					showConfirmButton: true,
 					confirmButtonText: 'Öffnen',
+					confirmButtonColor: '#3085d6',
 				})
 				if (!dismiss) {
 					if (link) window.open(link, 'target_' + link)
