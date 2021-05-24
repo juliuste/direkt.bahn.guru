@@ -8,10 +8,10 @@
 	"license": "ISC",
 	"author": "Julius Tens <mail@juliustens.eu>",
 	"scripts": {
-		"build": "browserify lib/index.js > assets/bundle.js",
+		"build": "browserify src/index.js > assets/bundle.js",
 		"check-deps": "depcheck --ignore-patterns='assets/bundle.js' --ignores=acorn",
 		"fix": "npm run lint -- --fix",
-		"lint": "eslint lib",
+		"lint": "eslint src",
 		"test": "npm run lint && npm run check-deps && npm run build"
 	},
 	"dependencies": {
