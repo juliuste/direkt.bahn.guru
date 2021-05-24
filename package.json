@@ -17,13 +17,15 @@
 	"dependencies": {
 		"@mapbox/mapbox-gl-geocoder": "^4.7.0",
 		"fetch-ponyfill": "^7.1.0",
+		"i18n-iso-countries": "^6.7.0",
 		"is-uic-location-code": "0.0.1",
 		"lodash": "^4.17.21",
 		"luxon": "^1.27.0",
 		"maplibre-gl": "^1.14.0",
 		"query-string": "^7.0.0",
 		"querystate": "^1.0.9",
-		"sweetalert2": "^9.17.2"
+		"sweetalert2": "^11.0.11",
+		"uic-codes": "^0.3.0"
 	},
 	"devDependencies": {
 		"browserify": "^17.0.0",

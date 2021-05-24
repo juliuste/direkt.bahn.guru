@@ -1,8 +1,21 @@
 const { fetch } = require('fetch-ponyfill')()
 const { stringify } = require('query-string')
 const isUicLocationCode = require('is-uic-location-code')
+const { toISO } = require('uic-codes')
+const countries = require('i18n-iso-countries')
+const countryLocale = require('i18n-iso-countries/langs/en.json')
+
+countries.registerLocale(countryLocale)
 
 const formatStationId = i => (i.length === 9 && i.slice(0, 2)) ? i.slice(2) : i
+const countryForStationId = _i => {
+	const i = formatStationId(_i)
+	if (!isUicLocationCode(i)) return undefined
+	const countryPrefix = +i.slice(0, 2)
+	const alpha3 = toISO[countryPrefix]
+	if (!alpha3) return undefined
+	return countries.getName(alpha3, 'en', { select: 'official' })
+}
 
 const stationById = async id => {
 	const candidates = await (fetch(`https://v5.db.transport.rest/locations?query=${id}`).then(res => res.json()))
@@ -56,7 +69,7 @@ const toPoint = (station) => ({
 		type: 'Point',
 		coordinates: [station.location.longitude, station.location.latitude],
 	},
-	place_name: station.name,
+	place_name: [station.name, countryForStationId(station.id)].filter(Boolean).join(', '),
 	place_type: ['coordinate'],
 	properties: {
 		id: station.id,

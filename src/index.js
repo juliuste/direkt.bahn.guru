@@ -201,24 +201,27 @@ const onSelectLocation = async id => {
 	Sweetalert.fire({
 		title: 'Lädt…',
 		text: 'Verbindungen werden gesucht. Bei vielbefahrenen Stationen kann das bis zu 20 Sekunden dauern.',
-		onBeforeOpen: () => Sweetalert.enableLoading(),
+		willOpen: () => Sweetalert.enableLoading(),
 		allowOutsideClick: false,
 		allowEscapeKey: false,
+		allowEnterKey: false,
+		showConfirmButton: false,
+		showDenyButton: false,
+		showCancelButton: false,
 	})
 
 	await selectLocation(id)
 		.then(() => Sweetalert.close())
 		.catch(error => {
-			console.error('555', error)
 			Sweetalert.disableLoading()
 			if (error.code === 'STATION_NOT_FOUND') {
-				return Sweetalert.fire('Huch?!', 'Leider konnte die gewählte Station nicht in der Liste der Fernverkehrshalte gefunden werden, versuchen Sie es bitte mit einer anderen!', 'error')
+				return Sweetalert.fire({ title: 'Huch?!', text: 'Leider konnte die gewählte Station nicht in der Liste der Fernverkehrshalte gefunden werden, versuchen Sie es bitte mit einer anderen!', icon: 'error', confirmButtonColor: '#3085d6' })
 			}
 			if (error.code === 'NO_RESULTS') {
-				return Sweetalert.fire('Hmm…', 'Leider konnten für die Stadt, die du gesucht hast, keine Verbindungen gefunden werden.', 'warning')
+				return Sweetalert.fire({ title: 'Hmm…', text: 'Leider konnten für die Stadt, die du gesucht hast, keine Verbindungen gefunden werden.', icon: 'warning', confirmButtonColor: '#3085d6' })
 			}
 			// @todo give more info on server errors
-			return Sweetalert.fire('Huch?!', 'Leider ist ein unbekannter Fehler aufgetreten, bitte versuchen Sie es erneut oder kontaktieren Sie uns, falls der Fehler häufiger auftritt.', 'error')
+			return Sweetalert.fire({ title: 'Huch?!', text: 'Leider ist ein unbekannter Fehler aufgetreten, bitte versuchen Sie es erneut oder kontaktieren Sie uns, falls der Fehler häufiger auftritt.', icon: 'error', confirmButtonColor: '#3085d6' })
 		})
 }
 

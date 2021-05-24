@@ -10,24 +10,28 @@ specifiers:
   eslint-plugin-node: ^11.1.0
   eslint-plugin-promise: ^5.1.0
   fetch-ponyfill: ^7.1.0
+  i18n-iso-countries: ^6.7.0
   is-uic-location-code: 0.0.1
   lodash: ^4.17.21
   luxon: ^1.27.0
   maplibre-gl: ^1.14.0
   query-string: ^7.0.0
   querystate: ^1.0.9
-  sweetalert2: ^9.17.2
+  sweetalert2: ^11.0.11
+  uic-codes: ^0.3.0
 
 dependencies:
   '@mapbox/mapbox-gl-geocoder': 4.7.0
   fetch-ponyfill: 7.1.0
+  i18n-iso-countries: 6.7.0
   is-uic-location-code: 0.0.1
   lodash: 4.17.21
   luxon: 1.27.0
   maplibre-gl: 1.14.0
   query-string: 7.0.0
   querystate: 1.0.9
-  sweetalert2: 9.17.2
+  sweetalert2: 11.0.11
+  uic-codes: 0.3.0
 
 devDependencies:
   browserify: 17.0.0
@@ -1067,6 +1071,10 @@ packages:
       minimist: 1.2.5
     dev: true
 
+  /diacritics/1.3.0:
+    resolution: {integrity: sha1-PvqHMj67hj5mls67AILUj/PW96E=}
+    dev: false
+
   /diffie-hellman/5.0.3:
     resolution: {integrity: sha512-kqag/Nl+f3GwyK25fhUMYj81BUOrZ9IuJsjIcDE5icNM9FJHAVm3VcUDxdLPoQtTuUylWm6ZIknYJwwaPxsUzg==}
     dependencies:
@@ -1717,6 +1725,13 @@ packages:
   /https-browserify/1.0.0:
     resolution: {integrity: sha1-7AbBDgo0wPL68Zn3/X/Hj//QPHM=}
     dev: true
+
+  /i18n-iso-countries/6.7.0:
+    resolution: {integrity: sha512-34JlFLXlDLq93N6bzEqTEuzW4ehDJ8Hbu4PyHHlO3bMrERNLO6NjQD/OfcjtObO5ZMwu4Lrr5FQlaCYtE2wAsQ==}
+    engines: {node: '>= 10'}
+    dependencies:
+      diacritics: 1.3.0
+    dev: false
 
   /icss-replace-symbols/1.1.0:
     resolution: {integrity: sha1-Bupvg2ead0njhs/h/oEq5dsiPe0=}
@@ -3256,8 +3271,8 @@ packages:
       has-flag: 4.0.0
     dev: true
 
-  /sweetalert2/9.17.2:
-    resolution: {integrity: sha512-HkpPZVMYsnhFUBLdy/LvkU9snggKP3VAuSVnPhVXjxdg02lWbFx0W8H3m7A+WMWw2diXZS1wIa4m67XkNxdvew==}
+  /sweetalert2/11.0.11:
+    resolution: {integrity: sha512-3xO4NI9mfO/9UImBu0Kym4tHEPQClxucLzBl9R8PPphNrdpen0TyWWBggz/EKCnidQfXYmt9R3pOr6CK4EQMwQ==}
     dev: false
 
   /syntax-error/1.4.0:
