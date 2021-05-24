@@ -24565,7 +24565,7 @@ const selectLocation = async id => {
 		type: 'FeatureCollection',
 		features: [],
 	}
-	return fetch(`https://api.direkt.bahn.guru/${formatStationId(origin.id)}?allowLocalTrains=false`)
+	return fetch(`https://api.direkt.bahn.guru/${formatStationId(origin.id)}?allowLocalTrains=true`)
 		.then(res => res.json())
 		.then(async results => {
 			const resultsWithLocations = results.map(r => ({
