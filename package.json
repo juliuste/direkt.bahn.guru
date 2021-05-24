@@ -9,29 +9,27 @@
 	"author": "Julius Tens <mail@juliustens.eu>",
 	"scripts": {
 		"build": "browserify src/index.js > assets/bundle.js",
-		"check-deps": "depcheck --ignore-patterns='assets/bundle.js' --ignores=acorn",
+		"check-deps": "depcheck --ignore-patterns='assets/bundle.js'",
 		"fix": "npm run lint -- --fix",
 		"lint": "eslint src",
 		"test": "npm run lint && npm run check-deps && npm run build"
 	},
 	"dependencies": {
-		"acorn": "^8.2.4",
+		"@mapbox/mapbox-gl-geocoder": "^4.7.0",
 		"fetch-ponyfill": "^7.1.0",
 		"is-uic-location-code": "0.0.1",
 		"lodash": "^4.17.21",
 		"luxon": "^1.27.0",
-		"mapbox-gl": "^1.13.1",
+		"maplibre-gl": "^1.14.0",
 		"query-string": "^7.0.0",
 		"querystate": "^1.0.9",
-		"suggestions": "^1.7.1",
-		"sweetalert2": "^9.17.2",
-		"xtend": "^4.0.2"
+		"sweetalert2": "^9.17.2"
 	},
 	"devDependencies": {
 		"browserify": "^17.0.0",
 		"depcheck": "^1.4.1",
 		"eslint": "^7.27.0",
-		"eslint-config-standard": "^16.0.2",
+		"eslint-config-standard": "^16.0.3",
 		"eslint-plugin-import": "^2.23.3",
 		"eslint-plugin-node": "^11.1.0",
 		"eslint-plugin-promise": "^5.1.0"
