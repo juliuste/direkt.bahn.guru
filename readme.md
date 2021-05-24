@@ -2,10 +2,10 @@
 
 **[direkt.bahn.guru](https://direkt.bahn.guru/)** All direct long-distance railway connections from a given city.
 
-[![Build Status](https://travis-ci.org/juliuste/direkt.bahn.guru.svg?branch=master)](https://travis-ci.org/juliuste/direkt.bahn.guru)
-[![license](https://img.shields.io/github/license/juliuste/direkt.bahn.guru.svg?style=flat)](license)
+[![License](https://img.shields.io/github/license/juliuste/direkt.bahn.guru.svg?style=flat)](license)
+[![Contact me](https://img.shields.io/badge/contact-email-turquoise)](mailto:mail@juliustens.eu)
 
-[![direkt.bahn.guru](assets/screenshot.png)](https://direkt.bahn.guru)
+[![Screenshot of direkt.bahn.guru](assets/screenshot.png)](https://direkt.bahn.guru)
 
 ## See also
 

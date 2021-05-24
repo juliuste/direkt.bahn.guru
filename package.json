@@ -9,8 +9,8 @@
 	"author": "Julius Tens <mail@juliustens.eu>",
 	"scripts": {
 		"build": "browserify lib/index.js > assets/bundle.js",
-		"check-deps": "depcheck . --ignore-dirs=assets --ignores=browserify,acorn",
-		"fix": "eslint --fix lib",
+		"check-deps": "depcheck --ignore-patterns='assets/bundle.js' --ignores=acorn",
+		"fix": "npm run lint -- --fix",
 		"lint": "eslint lib",
 		"test": "npm run lint && npm run check-deps && npm run build"
 	},
@@ -29,15 +29,14 @@
 	},
 	"devDependencies": {
 		"browserify": "^16.5.2",
-		"depcheck": "^0.9.2",
-		"eslint": "^6.8.0",
-		"eslint-config-standard": "^14.1.1",
-		"eslint-plugin-import": "^2.22.1",
-		"eslint-plugin-node": "^10.0.0",
-		"eslint-plugin-promise": "^4.2.1",
-		"eslint-plugin-standard": "^4.1.0"
+		"depcheck": "^1.4.1",
+		"eslint": "^7.27.0",
+		"eslint-config-standard": "^16.0.2",
+		"eslint-plugin-import": "^2.23.3",
+		"eslint-plugin-node": "^11.1.0",
+		"eslint-plugin-promise": "^5.1.0"
 	},
 	"engines": {
-		"node": ">=10"
+		"node": ">=14"
 	}
 }
