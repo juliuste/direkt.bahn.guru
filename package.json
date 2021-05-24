@@ -16,6 +16,7 @@
 	},
 	"dependencies": {
 		"@mapbox/mapbox-gl-geocoder": "^4.7.0",
+		"db-clean-station-name": "^1.2.0",
 		"fetch-ponyfill": "^7.1.0",
 		"i18n-iso-countries": "^6.7.0",
 		"is-uic-location-code": "0.0.1",

@@ -3,6 +3,7 @@ lockfileVersion: 5.3
 specifiers:
   '@mapbox/mapbox-gl-geocoder': ^4.7.0
   browserify: ^17.0.0
+  db-clean-station-name: ^1.2.0
   depcheck: ^1.4.1
   eslint: ^7.27.0
   eslint-config-standard: ^16.0.3
@@ -22,6 +23,7 @@ specifiers:
 
 dependencies:
   '@mapbox/mapbox-gl-geocoder': 4.7.0
+  db-clean-station-name: 1.2.0
   fetch-ponyfill: 7.1.0
   i18n-iso-countries: 6.7.0
   is-uic-location-code: 0.0.1
@@ -240,9 +242,51 @@ packages:
     engines: {node: '>=6.0.0'}
     dev: false
 
+  /@sindresorhus/is/0.3.0:
+    resolution: {integrity: sha1-riSLJ0y57sLYx6zfanBokSb/cjc=}
+    engines: {node: '>=4'}
+    dev: false
+
   /@sindresorhus/is/0.7.0:
     resolution: {integrity: sha512-ONhaKPIufzzrlNbqtWFFd+jlnemX6lJAgq9ZeiZtS7I1PIf/la7CW4m83rTXRnVnsMbW2k56pGYu7AUFJD9Pow==}
     engines: {node: '>=4'}
+    dev: false
+
+  /@turf/bbox/6.3.0:
+    resolution: {integrity: sha512-N4ue5Xopu1qieSHP2MA/CJGWHPKaTrVXQJjzHRNcY1vtsO126xbSaJhWUrFc5x5vVkXp0dcucGryO0r5m4o/KA==}
+    dependencies:
+      '@turf/helpers': 6.3.0
+      '@turf/meta': 6.3.0
+    dev: false
+
+  /@turf/circle/6.3.0:
+    resolution: {integrity: sha512-5N3J4YQr1efidvPgvtIQYpxb7gBVEoo00IFC0JNH6KqIVBMttFZw3Wsqor34ya91m58A5m6HTiz9Cdm1ktrEdw==}
+    dependencies:
+      '@turf/destination': 6.3.0
+      '@turf/helpers': 6.3.0
+    dev: false
+
+  /@turf/destination/6.3.0:
+    resolution: {integrity: sha512-aLt3U/XkJWyZW08Ln1qZwBNAGh27yhmYLu892+dBj3gKP6UUiR6ZopXxrBwjBVe00A6k2ktftKDn79qe0hptuw==}
+    dependencies:
+      '@turf/helpers': 6.3.0
+      '@turf/invariant': 6.3.0
+    dev: false
+
+  /@turf/helpers/6.3.0:
+    resolution: {integrity: sha512-kr6KuD4Z0GZ30tblTEvi90rvvVNlKieXuMC8CTzE/rVQb0/f/Cb29zCXxTD7giQTEQY/P2nRW23wEqqyNHulCg==}
+    dev: false
+
+  /@turf/invariant/6.3.0:
+    resolution: {integrity: sha512-2OFOi9p+QOrcIMySEnr+WlOiKaFZ1bY56jA98YyECewJHfhPFWUBZEhc4nWGRT0ahK08Vus9+gcuBX8QIpCIIw==}
+    dependencies:
+      '@turf/helpers': 6.3.0
+    dev: false
+
+  /@turf/meta/6.3.0:
+    resolution: {integrity: sha512-qBJjaAJS9H3ap0HlGXyF/Bzfl0qkA9suafX/jnDsZvWMfVLt+s+o6twKrXOGk5t7nnNON2NFRC8+czxpu104EQ==}
+    dependencies:
+      '@turf/helpers': 6.3.0
     dev: false
 
   /@types/json5/0.0.29:
@@ -939,6 +983,16 @@ packages:
     resolution: {integrity: sha512-Vy4dx7gquTeMcQR/hDkYLGUnwVil6vk4FOOct+djUnHOUWt+zJPJAaRIXaAFkPXtJjvlY7o3rfRu0/3hpnwoUA==}
     dev: true
 
+  /db-clean-station-name/1.2.0:
+    resolution: {integrity: sha512-ZOKCbUcg6bFN/ddDrJ/8HJ8zS7ZxjMuDPs+RZn47+FKdzqN9J0b4uIUyG0Z1vykjA2VnVsmdyLWeujqbvupq1A==}
+    engines: {node: '>=10'}
+    dependencies:
+      '@turf/circle': 6.3.0
+      geojson-rbush: 3.1.2
+      lodash: 4.17.21
+      validate-fptf: 3.0.0
+    dev: false
+
   /debug/2.6.9:
     resolution: {integrity: sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==}
     dependencies:
@@ -1540,6 +1594,15 @@ packages:
       loader-utils: 1.4.0
     dev: true
 
+  /geojson-rbush/3.1.2:
+    resolution: {integrity: sha512-grkfdg3HIeTjwTfiJe5FT8+fGU3fABCc+vRJDBwdQz9kkLF0Sbif2gs2JUzjewwgmnvLGy9fInySDeADoNuk7w==}
+    dependencies:
+      '@turf/bbox': 6.3.0
+      '@turf/helpers': 6.3.0
+      '@turf/meta': 6.3.0
+      rbush: 2.0.2
+    dev: false
+
   /geojson-vt/3.2.1:
     resolution: {integrity: sha512-EvGQQi/zPrDA6zr6BnJD/YhwAkBP8nnJ9emh3EnHQKVMfg/MRVtPbMYdgVy/IaEmn4UfagD2a6fafPDL5hbtwg==}
     dev: false
@@ -1870,10 +1933,19 @@ packages:
     engines: {node: '>= 0.4'}
     dev: true
 
+  /is-coordinates/2.0.2:
+    resolution: {integrity: sha1-wxO7bs4k7Tm2rT/fz26Ok64Rc3A=}
+    engines: {node: '>=4'}
+    dev: false
+
   /is-core-module/2.4.0:
     resolution: {integrity: sha512-6A2fkfq1rfeQZjxrZJGerpLCTHRNEBiSgnu0+obeJpEPZRUooHgsizvzv0ZjJwOz3iWIHdJtVWJ/tmPr3D21/A==}
     dependencies:
       has: 1.0.3
+
+  /is-currency-code/1.2.0:
+    resolution: {integrity: sha512-rm+zNay1cLXY2Nw7TE5mpR3SY6Uuxc7V7VgTqWBK7k3IkcxqPDP25Ar0a8Y6kuE9EnIFlQA93u3E5ni73AzKkA==}
+    dev: false
 
   /is-date-object/1.0.4:
     resolution: {integrity: sha512-/b4ZVsG7Z5XVtIxs/h9W8nvfLgSAyKYdtGWQLbqy6jA1icmgjf8WCoTKgeS4wy5tYaPePouzFMANbnj94c2Z+A==}
@@ -2829,6 +2901,10 @@ packages:
     engines: {node: '>=8'}
     dev: false
 
+  /quickselect/1.1.1:
+    resolution: {integrity: sha512-qN0Gqdw4c4KGPsBOQafj6yj/PA6c/L63f6CaZ/DCF/xF4Esu3jVmKLUDYxghFx8Kb/O7y9tI7x2RjTSXwdK1iQ==}
+    dev: false
+
   /quickselect/2.0.0:
     resolution: {integrity: sha512-RKJ22hX8mHe3Y6wH/N3wCM6BWtjaxIyyUIkpHOvfFnxdI4yD4tBXEBKSbriGujF6jnSVkJrffuo6vxACiSSxIw==}
     dev: false
@@ -2845,6 +2921,12 @@ packages:
       randombytes: 2.1.0
       safe-buffer: 5.2.1
     dev: true
+
+  /rbush/2.0.2:
+    resolution: {integrity: sha512-XBOuALcTm+O/H8G90b6pzu6nX6v2zCKiFG4BJho8a+bY6AER6t8uQUZdi5bomQc0AprCWhEGa7ncAbbRap0bRA==}
+    dependencies:
+      quickselect: 1.1.1
+    dev: false
 
   /read-only-stream/2.0.0:
     resolution: {integrity: sha1-JyT9aoET1zdkrCiNQ4YnDB2/F/A=}
@@ -3462,6 +3544,15 @@ packages:
   /v8-compile-cache/2.3.0:
     resolution: {integrity: sha512-l8lCEmLcLYZh4nbunNZvQCJc5pv7+RCwa8q/LdUx8u7lsWvPDKmpodJAJNwkAhJC//dFY48KuIEmjtd4RViDrA==}
     dev: true
+
+  /validate-fptf/3.0.0:
+    resolution: {integrity: sha512-aCqCgA0GZIScszZlUcXzjNnh6CkLTeELwJQpfFx091AwuL+2zuPggs1b0g78ufiP6Tklv9uLBQQEAaJoa84nbg==}
+    engines: {node: '>=6'}
+    dependencies:
+      '@sindresorhus/is': 0.3.0
+      is-coordinates: 2.0.2
+      is-currency-code: 1.2.0
+    dev: false
 
   /validate-npm-package-license/3.0.4:
     resolution: {integrity: sha512-DpKm2Ui/xN7/HQKCtpZxoRWBhZ9Z0kqtygG8XCgNQ8ZlDnxuQmWhj566j8fN4Cu3/JmbhsDo7fcAJq4s9h27Ew==}

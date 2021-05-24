@@ -8,6 +8,7 @@ const MapboxGeocoder = require('@mapbox/mapbox-gl-geocoder')
 const sortBy = require('lodash/sortBy')
 const queryState = require('querystate')()
 const { Duration } = require('luxon')
+const cleanStationName = require('db-clean-station-name')
 const {
 	formatStationId,
 	stationById,
@@ -75,17 +76,17 @@ const selectLocation = async id => {
 		error.code = 'STATION_NOT_FOUND'
 		throw error
 	}
-	geocoder.setPlaceholder(origin.name || 'Station suchen…')
+	geocoder.setPlaceholder(cleanStationName(origin.name) || 'Station suchen…')
 	geocoder.setInput('')
 
 	const pageTitle = document.querySelector('title')
-	if (origin.name) pageTitle.innerHTML = [origin.name, '🇪🇺 Zug-Direktverbindungen'].join(' | ')
+	if (origin.name) pageTitle.innerHTML = [cleanStationName(origin.name), '🇪🇺 Zug-Direktverbindungen'].join(' | ')
 	const stationFeature = {
 		type: 'feature',
 		geometry: locationToPoint(origin.location),
 		properties: {
 			type: 1,
-			name: origin.name,
+			name: cleanStationName(origin.name),
 			duration: durationCategory(0),
 			durationMinutes: 0,
 		},
@@ -94,7 +95,7 @@ const selectLocation = async id => {
 		type: 'FeatureCollection',
 		features: [],
 	}
-	return fetch(`https://api.direkt.bahn.guru/${formatStationId(origin.id)}?allowLocalTrains=true`)
+	return fetch(`https://api.direkt.bahn.guru/${formatStationId(origin.id)}?allowLocalTrains=false`)
 		.then(res => res.json())
 		.then(async results => {
 			const resultsWithLocations = results.map(r => ({
@@ -106,7 +107,7 @@ const selectLocation = async id => {
 				geometry: locationToPoint(r.location),
 				properties: {
 					type: 2,
-					name: r.name,
+					name: cleanStationName(r.name),
 					duration: durationCategory(r.duration),
 					durationMinutes: r.duration,
 					link: buildLink(origin, r),
