@@ -1,0 +1,43 @@
+name: CI
+on:
+  [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: npm i
+    - run: npm test
+      env:
+        CI: true
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.ref == 'refs/heads/main'
+    steps:
+    - name: Checkout main
+      uses: actions/checkout@v2
+    - name: Use Node.js 14
+      uses: actions/setup-node@v1
+      with:
+        node-version: 14
+    - run: npm i
+    - run: npm run build
+    - run: mkdir -p target
+    - run: mv index.html target/
+    - run: mv assets target/assets
+    - run: echo 'direkt.bahn.guru' > target/CNAME
+    - run: touch target/.nojekyll
+    - name: Deploy
+      uses: JamesIves/github-pages-deploy-action@4.1.3
+      with:
+        branch: gh-pages
+        folder: target
+    - run: rm -r target
