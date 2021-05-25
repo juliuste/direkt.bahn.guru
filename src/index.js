@@ -68,6 +68,8 @@ const geocoder = new MapboxGeocoder({
 })
 map.addControl(geocoder)
 
+let popupOpenSince = null
+let popupOpenFor = null
 const selectLocation = async id => {
 	const origin = await stationById(id)
 	if (!origin) {
@@ -132,9 +134,9 @@ const selectLocation = async id => {
 					'circle-radius': [
 						'interpolate',
 						['linear'],
-						['number', ['get', 'type']],
-						1, 8, // origin
-						2, 5.5, // destination
+						['zoom'],
+						4.5, ['*', 4.5, ['/', 2, ['number', ['get', 'type']]]], // origin = 1, destination = 2
+						15, ['*', 12, ['/', 2, ['number', ['get', 'type']]]], // origin = 1, destination = 2
 					],
 					'circle-color': [
 						'interpolate',
@@ -154,6 +156,7 @@ const selectLocation = async id => {
 
 			map.on('click', 'stations', async e => {
 				const link = e.features[0].properties.link
+				if (!(popupOpenSince && (+new Date() - (+popupOpenSince) > 50) && popupOpenFor === link)) return // @todo xD
 				const { dismiss } = await Sweetalert.fire({
 					title: 'Verbindungsdetails',
 					text: 'Du wirst auf den Bahn-Preiskalender für die gewählte Verbindung weitergeleitet. Bitte beachte, dass du dort nur Preise für von der DB beworbene Fernverkehrsverbindungen findest, für alle anderen Verbindungen suche bitte auf den Seiten der lokalen Betreiber.',
@@ -170,7 +173,7 @@ const selectLocation = async id => {
 
 			map.on('mouseenter', 'stations', e => {
 				const coordinates = e.features[0].geometry.coordinates.slice()
-				const { name, duration, durationMinutes } = e.features[0].properties
+				const { name, duration, durationMinutes, link } = e.features[0].properties
 
 				let durationElement = ''
 				if (Number.isInteger(durationMinutes)) {
@@ -179,6 +182,8 @@ const selectLocation = async id => {
 					durationElement = ` <b style="color: ${durationColour};">${formattedDuration}h</b>`
 				}
 
+				popupOpenSince = new Date()
+				popupOpenFor = link
 				popup.setLngLat(coordinates)
 					.setHTML(`${name}${durationElement}`)
 					.addTo(map)
@@ -187,6 +192,8 @@ const selectLocation = async id => {
 
 			map.on('mouseleave', 'stations', e => {
 				map.getCanvas().style.cursor = ''
+				popupOpenSince = null
+				popupOpenFor = null
 				popup.remove()
 			})
 
