@@ -4,7 +4,6 @@ const isUicLocationCode = require('is-uic-location-code')
 const { toISO } = require('uic-codes')
 const countries = require('i18n-iso-countries')
 const countryLocale = require('i18n-iso-countries/langs/en.json')
-const cleanStationName = require('db-clean-station-name')
 
 countries.registerLocale(countryLocale)
 
@@ -70,11 +69,11 @@ const toPoint = (station) => ({
 		type: 'Point',
 		coordinates: [station.location.longitude, station.location.latitude],
 	},
-	place_name: [cleanStationName(station.name), countryForStationId(station.id)].filter(Boolean).join(', '),
+	place_name: [station.name, countryForStationId(station.id)].filter(Boolean).join(', '),
 	place_type: ['coordinate'],
 	properties: {
 		id: station.id,
-		name: cleanStationName(station.name),
+		name: station.name,
 	},
 	type: 'Feature',
 })
