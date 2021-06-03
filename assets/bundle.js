@@ -1609,7 +1609,7 @@ MapboxGeocoder.prototype = {
    */
   setMinLength: function(minLength){
     this.options.minLength = minLength;
-    if (this._typeahead)  this._typeahead.minLength = minLength;
+    if (this._typeahead)  this._typeahead.options.minLength = minLength;
     return this;
   },
 
@@ -1779,7 +1779,8 @@ var placeholder = {
   'ko': '수색',//korean
   'pl':  'Szukaj', //polish
   'sl': 'Iskanje', //slovenian
-  'fa': 'جستجو' //persian(aka farsi)
+  'fa': 'جستجو',  //persian(aka farsi)
+  'ru': 'Поиск'//russian
 }
 
 module.exports = {placeholder: placeholder};
@@ -20368,7 +20369,7 @@ module.exports = Suggestions;
 
 },{"./list":190,"fuzzy":31,"xtend":195}],192:[function(require,module,exports){
 /*!
-* sweetalert2 v11.0.11
+* sweetalert2 v11.0.16
 * Released under the MIT License.
 */
 (function (global, factory) {
@@ -21004,11 +21005,6 @@ module.exports = Suggestions;
     }
 
     handleBackdropParam(container, params.backdrop);
-
-    if (!params.backdrop && params.allowOutsideClick) {
-      warn('"allowOutsideClick" parameter requires `backdrop` parameter to be set to `true`');
-    }
-
     handlePositionParam(container, params.position);
     handleGrowParam(container, params.grow); // Custom class
 
@@ -21861,6 +21857,10 @@ module.exports = Suggestions;
 
 
   const showWarningsForParams = params => {
+    if (!params.backdrop && params.allowOutsideClick) {
+      warn('"allowOutsideClick" parameter requires `backdrop` parameter to be set to `true`');
+    }
+
     for (const param in params) {
       checkIfParamIsValid(param);
 
@@ -22042,6 +22042,7 @@ module.exports = Suggestions;
     }
 
     if (!isScrollable(container) && target.tagName !== 'INPUT' && // #1603
+    target.tagName !== 'TEXTAREA' && // #2266
     !(isScrollable(getHtmlContainer()) && // #1944
     getHtmlContainer().contains(target))) {
       return true;
@@ -22127,7 +22128,14 @@ module.exports = Suggestions;
       globalState.keydownHandlerAdded = false;
     }
 
-    if (container.parentNode) {
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent); // workaround for #2088
+    // for some reason removing the container in Safari will scroll the document to bottom
+
+    if (isSafari) {
+      container.setAttribute('style', 'display:none !important');
+      container.removeAttribute('class');
+      container.innerHTML = '';
+    } else {
       container.remove();
     }
 
@@ -22681,6 +22689,7 @@ module.exports = Suggestions;
     if (params.input === 'select' || params.input === 'radio') {
       handleInputOptions(instance, params);
     } else if (['text', 'email', 'number', 'tel', 'textarea'].includes(params.input) && (hasToPromiseFn(params.inputValue) || isPromise(params.inputValue))) {
+      showLoading(getConfirmButton());
       handleInputValue(instance, params);
     }
   };
@@ -23453,7 +23462,7 @@ module.exports = Suggestions;
     };
   });
   SweetAlert.DismissReason = DismissReason;
-  SweetAlert.version = '11.0.11';
+  SweetAlert.version = '11.0.16';
 
   const Swal = SweetAlert;
   Swal.default = Swal;
@@ -23681,7 +23690,6 @@ module.exports = {
 
 },{"fetch-ponyfill":29,"i18n-iso-countries":33,"i18n-iso-countries/langs/en.json":34,"is-uic-location-code":36,"query-string":178,"uic-codes":193}],197:[function(require,module,exports){
 'use strict'
-/* global window */
 
 const { fetch } = require('fetch-ponyfill')()
 const Sweetalert = require('sweetalert2')
