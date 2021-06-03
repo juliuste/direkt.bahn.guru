@@ -1,5 +1,4 @@
 'use strict'
-/* global window */
 
 const { fetch } = require('fetch-ponyfill')()
 const Sweetalert = require('sweetalert2')
