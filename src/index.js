@@ -150,6 +150,8 @@ const selectLocation = async id => {
 						5, durationCategoryColour(5), // 8h-16h
 						6, durationCategoryColour(6), // > 16h
 					],
+					'circle-stroke-color': '#333',
+					'circle-stroke-width': 0.5,
 				},
 			})
 
