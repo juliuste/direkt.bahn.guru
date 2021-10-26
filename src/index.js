@@ -18,6 +18,7 @@ const {
 	isLongDistanceOrRegional,
 	isRegion,
 	hasLocation,
+	fetchStation,
 } = require('./helpers')
 
 mapboxGl.accessToken = 'pk.eyJ1IjoianVsaXVzdGUiLCJhIjoiY2t2N3UyeDZ2MjdqZjJvb3ZmcWNyc2QxbSJ9.oB7xzSTcmeDMcl4DhjSl0Q'
@@ -60,7 +61,7 @@ const geocoder = new MapboxGeocoder({
 	localGeocoder: () => [], // the mapbox geocoder library has a slightly awkward api, which requires this stub to disable requests to the "normal" mapbox place search api
 	localGeocoderOnly: true,
 	externalGeocoder: async (query) => {
-		const results = await (fetch(`https://v5.db.transport.rest/locations?query=${query}`).then(res => res.json()))
+		const results = await (fetchStation(query).then(res => res.json()))
 		const filteredResults = results.filter(x => isLongDistanceOrRegional(x) && !isRegion(x) && hasLocation(x))
 		return filteredResults.map(toPoint)
 	},

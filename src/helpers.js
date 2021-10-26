@@ -5,6 +5,13 @@ const { toISO } = require('uic-codes')
 const countries = require('i18n-iso-countries')
 const countryLocale = require('i18n-iso-countries/langs/en.json')
 
+const fetchStation = async (query) => {
+	return Promise.race([
+		fetch(`https://v5.db.transport.rest/locations?query=${query}`),
+		fetch(`https://v5.db.juliustens.eu/locations?query=${query}`),
+	])
+}
+
 countries.registerLocale(countryLocale)
 
 const formatStationId = i => (i.length === 9 && i.slice(0, 2)) ? i.slice(2) : i
@@ -18,7 +25,7 @@ const countryForStationId = _i => {
 }
 
 const stationById = async id => {
-	const candidates = await (fetch(`https://v5.db.transport.rest/locations?query=${id}`).then(res => res.json()))
+	const candidates = await (fetchStation(id).then(res => res.json()))
 	return candidates.find(s => (formatStationId(s.id) === formatStationId(id)) && formatStationId(id) && s.location)
 }
 
@@ -91,6 +98,7 @@ const hasLocation = s => {
 }
 
 module.exports = {
+	fetchStation,
 	formatStationId,
 	stationById,
 	locationToPoint,
