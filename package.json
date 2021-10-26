@@ -22,7 +22,7 @@
 		"is-uic-location-code": "0.0.1",
 		"lodash": "^4.17.21",
 		"luxon": "^1.27.0",
-		"maplibre-gl": "^1.14.0",
+		"mapbox-gl": "^2.5.1",
 		"query-string": "^7.0.0",
 		"querystate": "^1.0.9",
 		"sweetalert2": "^11.0.16",

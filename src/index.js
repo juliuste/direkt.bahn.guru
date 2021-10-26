@@ -2,7 +2,7 @@
 
 const { fetch } = require('fetch-ponyfill')()
 const Sweetalert = require('sweetalert2')
-const mapLibre = require('maplibre-gl')
+const mapboxGl = require('mapbox-gl')
 const MapboxGeocoder = require('@mapbox/mapbox-gl-geocoder')
 const sortBy = require('lodash/sortBy')
 const queryState = require('querystate')()
@@ -20,10 +20,10 @@ const {
 	hasLocation,
 } = require('./helpers')
 
-const mapTilerKey = '0gVQZrq3O37rirjPt3wq'
-const map = new mapLibre.Map({
+mapboxGl.accessToken = 'pk.eyJ1IjoianVsaXVzdGUiLCJhIjoiY2t2N3UyeDZ2MjdqZjJvb3ZmcWNyc2QxbSJ9.oB7xzSTcmeDMcl4DhjSl0Q'
+const map = new mapboxGl.Map({
 	container: 'map',
-	style: `https://api.maptiler.com/maps/pastel/style.json?key=${mapTilerKey}`,
+	style: 'mapbox://styles/mapbox/light-v10',
 	zoom: 4.5,
 	center: [10.43, 51.15],
 	attributionControl: true,
@@ -45,7 +45,7 @@ const resize = () => {
 resize()
 window.addEventListener('resize', resize)
 
-const popup = new mapLibre.Popup({
+const popup = new mapboxGl.Popup({
 	closeButton: false,
 	closeOnClick: false,
 	maxWidth: null,
