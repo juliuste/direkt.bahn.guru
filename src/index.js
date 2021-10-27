@@ -7,6 +7,80 @@ const MapboxGeocoder = require('@mapbox/mapbox-gl-geocoder')
 const sortBy = require('lodash/sortBy')
 const queryState = require('querystate')()
 const { Duration } = require('luxon')
+
+const { match } = require('@formatjs/intl-localematcher')
+const { getUserLocales } = require('get-user-locale')
+
+// todo: use a library for this
+const translations = {
+	baseTitle: {
+		de: '🇪🇺 Zug-Direktverbindungen',
+		en: '🇪🇺 Direct train connections',
+	},
+	searchPlaceholder: {
+		de: 'Station suchen…',
+		en: 'Search for a station…',
+	},
+	redirectionAlertTitle: {
+		de: 'Verbindungsdetails',
+		en: 'Connection details',
+	},
+	redirectionAlertMessage: {
+		de: 'Du wirst auf den Bahn-Preiskalender für die gewählte Verbindung weitergeleitet. Bitte beachte, dass du dort nur Preise für von der DB beworbene Fernverkehrsverbindungen findest, für alle anderen Verbindungen suche bitte auf den Seiten der lokalen Betreiber.',
+		en: 'You will be forwarded to a price overview for the connection you selected. Please note that this page only includes prices for tickes sold by DB Fernverkehr. Please check the corresponding vendor\'s website for all other connections.',
+	},
+	redirectionAlertCancel: {
+		de: 'Abbrechen',
+		en: 'Cancel',
+	},
+	redirectionAlertContinue: {
+		de: 'Öffnen',
+		en: 'Continue',
+	},
+	loadingAlertTitle: {
+		de: 'Lädt…',
+		en: 'Loading…',
+	},
+	loadingAlertMessage: {
+		de: 'Verbindungen werden gesucht. Bei vielbefahrenen Stationen kann das bis zu 30 Sekunden dauern.',
+		en: 'Looking up connections. This might take up to 30 seconds at highly frequented stations.',
+	},
+	stationNotFoundAlertTitle: {
+		de: 'Huch?!',
+		en: 'Oops?!',
+	},
+	stationNotFoundAlertMessage: {
+		de: 'Leider konnte die gewählte Station nicht in der Liste der Regional- oder Fernverkehrshalte gefunden werden, versuchen Sie es bitte mit einer anderen.',
+		en: 'Unfortunately, the station you were looking for could not be found in our database. Please try a different one.',
+	},
+	noResultsAlertTitle: {
+		de: 'Hmm…',
+		en: 'Hmm…',
+	},
+	noResultsAlertMessage: {
+		de: 'Leider konnten für die Station, die du gesucht hast, keine Verbindungen gefunden werden.',
+		en: 'Unfortunately, we couldn\'t find any connections for the station you selected.',
+	},
+	unknownErrorAlertTitle: {
+		de: 'Huch?!',
+		en: 'Oops?!',
+	},
+	unknownErrorAlertMessage: {
+		de: 'Leider ist ein unbekannter Fehler aufgetreten, bitte versuchen Sie es erneut oder kontaktieren Sie uns, falls der Fehler häufiger auftritt.',
+		en: 'Unknown error. Please try again in a few moments or contact us, if the issue persists.',
+	},
+}
+
+const supportedLanguages = ['de', 'en']
+const language = match(getUserLocales(), supportedLanguages, 'en')
+const translate = token => {
+	const translation = translations[token]
+	if (!translation) { console.error('missing translation for token'); return token }
+	const translationForLanguage = translation[language]
+	if (!translation) { console.error(`missing translation for token ${token} in language ${language}`); return translation.en || token }
+	return translationForLanguage
+}
+
 const {
 	formatStationId,
 	stationById,
@@ -57,7 +131,7 @@ const geocoder = new MapboxGeocoder({
 	marker: false,
 	mapboxgl: map,
 	zoom: 4.5,
-	placeholder: 'Station suchen…',
+	placeholder: translate('searchPlaceholder'),
 	localGeocoder: () => [], // the mapbox geocoder library has a slightly awkward api, which requires this stub to disable requests to the "normal" mapbox place search api
 	localGeocoderOnly: true,
 	externalGeocoder: async (query) => {
@@ -77,11 +151,11 @@ const selectLocation = async id => {
 		error.code = 'STATION_NOT_FOUND'
 		throw error
 	}
-	geocoder.setPlaceholder(origin.name || 'Station suchen…')
+	geocoder.setPlaceholder(origin.name || translate('searchPlaceholder'))
 	geocoder.setInput('')
 
 	const pageTitle = document.querySelector('title')
-	if (origin.name) pageTitle.innerHTML = [origin.name, '🇪🇺 Zug-Direktverbindungen'].join(' | ')
+	if (origin.name) pageTitle.innerHTML = [origin.name, translate('baseTitle')].join(' | ')
 	const stationFeature = {
 		type: 'feature',
 		geometry: locationToPoint(origin.location),
@@ -160,12 +234,12 @@ const selectLocation = async id => {
 				const link = e.features[0].properties.link
 				if (!(popupOpenSince && (+new Date() - (+popupOpenSince) > 50) && popupOpenFor === link)) return // @todo xD
 				const { dismiss } = await Sweetalert.fire({
-					title: 'Verbindungsdetails',
-					text: 'Du wirst auf den Bahn-Preiskalender für die gewählte Verbindung weitergeleitet. Bitte beachte, dass du dort nur Preise für von der DB beworbene Fernverkehrsverbindungen findest, für alle anderen Verbindungen suche bitte auf den Seiten der lokalen Betreiber.',
+					title: translate('redirectionAlertTitle'),
+					text: translate('redirectionAlertMessage'),
 					showCancelButton: true,
-					cancelButtonText: 'Abbrechen',
+					cancelButtonText: translate('redirectionAlertCancel'),
 					showConfirmButton: true,
-					confirmButtonText: 'Öffnen',
+					confirmButtonText: translate('redirectionAlertContinue'),
 					confirmButtonColor: '#3085d6',
 				})
 				if (!dismiss) {
@@ -209,8 +283,8 @@ const selectLocation = async id => {
 
 const onSelectLocation = async id => {
 	Sweetalert.fire({
-		title: 'Lädt…',
-		text: 'Verbindungen werden gesucht. Bei vielbefahrenen Stationen kann das bis zu 20 Sekunden dauern.',
+		title: translate('loadingAlertTitle'),
+		text: translate('loadingAlertMessage'),
 		willOpen: () => Sweetalert.enableLoading(),
 		allowOutsideClick: false,
 		allowEscapeKey: false,
@@ -225,13 +299,13 @@ const onSelectLocation = async id => {
 		.catch(error => {
 			Sweetalert.disableLoading()
 			if (error.code === 'STATION_NOT_FOUND') {
-				return Sweetalert.fire({ title: 'Huch?!', text: 'Leider konnte die gewählte Station nicht in der Liste der Fernverkehrshalte gefunden werden, versuchen Sie es bitte mit einer anderen!', icon: 'error', confirmButtonColor: '#3085d6' })
+				return Sweetalert.fire({ title: translate('stationNotFoundAlertTitle'), text: translate('stationNotFoundAlertMessage'), icon: 'error', confirmButtonColor: '#3085d6' })
 			}
 			if (error.code === 'NO_RESULTS') {
-				return Sweetalert.fire({ title: 'Hmm…', text: 'Leider konnten für die Stadt, die du gesucht hast, keine Verbindungen gefunden werden.', icon: 'warning', confirmButtonColor: '#3085d6' })
+				return Sweetalert.fire({ title: translate('noResultsAlertTitle'), text: translate('noResultsAlertMessage'), icon: 'warning', confirmButtonColor: '#3085d6' })
 			}
 			// @todo give more info on server errors
-			return Sweetalert.fire({ title: 'Huch?!', text: 'Leider ist ein unbekannter Fehler aufgetreten, bitte versuchen Sie es erneut oder kontaktieren Sie uns, falls der Fehler häufiger auftritt.', icon: 'error', confirmButtonColor: '#3085d6' })
+			return Sweetalert.fire({ title: translate('unknownErrorAlertTitle'), text: translate('unknownErrorAlertMessage'), icon: 'error', confirmButtonColor: '#3085d6' })
 		})
 }
 
