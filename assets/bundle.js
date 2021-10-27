@@ -24570,8 +24570,8 @@ const toPoint = (station) => ({
 	type: 'Feature',
 })
 
-const isLongDistanceOrRegional = s => {
-	return s.products && (s.products.nationalExp || s.products.national || s.products.regionalExp || s.products.regional) && isUicLocationCode(formatStationId(s.id))
+const isLongDistanceOrRegionalOrSuburban = s => {
+	return s.products && (s.products.nationalExp || s.products.national || s.products.regionalExp || s.products.regional || s.products.suburban) && isUicLocationCode(formatStationId(s.id))
 }
 
 const isRegion = s => {
@@ -24591,7 +24591,7 @@ module.exports = {
 	durationCategoryColour,
 	buildLink,
 	toPoint,
-	isLongDistanceOrRegional,
+	isLongDistanceOrRegionalOrSuburban,
 	isRegion,
 	hasLocation,
 }
@@ -24688,7 +24688,7 @@ const {
 	durationCategoryColour,
 	buildLink,
 	toPoint,
-	isLongDistanceOrRegional,
+	isLongDistanceOrRegionalOrSuburban,
 	isRegion,
 	hasLocation,
 	fetchStation,
@@ -24735,7 +24735,7 @@ const geocoder = new MapboxGeocoder({
 	localGeocoderOnly: true,
 	externalGeocoder: async (query) => {
 		const results = await (fetchStation(query).then(res => res.json()))
-		const filteredResults = results.filter(x => isLongDistanceOrRegional(x) && !isRegion(x) && hasLocation(x))
+		const filteredResults = results.filter(x => isLongDistanceOrRegionalOrSuburban(x) && !isRegion(x) && hasLocation(x))
 		return filteredResults.map(toPoint)
 	},
 })
