@@ -7,8 +7,8 @@ const countryLocale = require('i18n-iso-countries/langs/en.json')
 
 const fetchStation = async (query) => {
 	return Promise.race([
-		fetch(`https://v5.db.transport.rest/locations?query=${query}`),
-		fetch(`https://v5.db.juliustens.eu/locations?query=${query}`),
+		fetch(`https://v5.db.transport.rest/locations?query=${query}&poi=false&addresses=false`),
+		fetch(`https://v5.db.juliustens.eu/locations?query=${query}&poi=false&addresses=false`),
 	])
 }
 
