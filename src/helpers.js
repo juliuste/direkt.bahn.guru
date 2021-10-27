@@ -85,8 +85,8 @@ const toPoint = (station) => ({
 	type: 'Feature',
 })
 
-const isLongDistanceOrRegional = s => {
-	return s.products && (s.products.nationalExp || s.products.national || s.products.regionalExp || s.products.regional) && isUicLocationCode(formatStationId(s.id))
+const isLongDistanceOrRegionalOrSuburban = s => {
+	return s.products && (s.products.nationalExp || s.products.national || s.products.regionalExp || s.products.regional || s.products.suburban) && isUicLocationCode(formatStationId(s.id))
 }
 
 const isRegion = s => {
@@ -106,7 +106,7 @@ module.exports = {
 	durationCategoryColour,
 	buildLink,
 	toPoint,
-	isLongDistanceOrRegional,
+	isLongDistanceOrRegionalOrSuburban,
 	isRegion,
 	hasLocation,
 }

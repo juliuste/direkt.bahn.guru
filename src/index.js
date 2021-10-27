@@ -89,7 +89,7 @@ const {
 	durationCategoryColour,
 	buildLink,
 	toPoint,
-	isLongDistanceOrRegional,
+	isLongDistanceOrRegionalOrSuburban,
 	isRegion,
 	hasLocation,
 	fetchStation,
@@ -136,7 +136,7 @@ const geocoder = new MapboxGeocoder({
 	localGeocoderOnly: true,
 	externalGeocoder: async (query) => {
 		const results = await (fetchStation(query).then(res => res.json()))
-		const filteredResults = results.filter(x => isLongDistanceOrRegional(x) && !isRegion(x) && hasLocation(x))
+		const filteredResults = results.filter(x => isLongDistanceOrRegionalOrSuburban(x) && !isRegion(x) && hasLocation(x))
 		return filteredResults.map(toPoint)
 	},
 })
