@@ -24649,7 +24649,7 @@ const translations = {
 		en: 'Oops?!',
 	},
 	stationNotFoundAlertMessage: {
-		de: 'Leider konnte die gewählte Station nicht in der Liste der Regional- oder Fernverkehrshalte gefunden werden, versuchen Sie es bitte mit einer anderen.',
+		de: 'Leider konnte die gewählte Station nicht in der Liste der S-Bahn-, Regional- und Fernverkehrshalte gefunden werden, versuchen Sie es bitte mit einer anderen.',
 		en: 'Unfortunately, the station you were looking for could not be found in our database. Please try a different one.',
 	},
 	noResultsAlertTitle: {
@@ -24769,7 +24769,7 @@ const selectLocation = async id => {
 		type: 'FeatureCollection',
 		features: [],
 	}
-	return fetch(`https://api.direkt.bahn.guru/${formatStationId(origin.id)}?allowLocalTrains=true`)
+	return fetch(`https://api.direkt.bahn.guru/${formatStationId(origin.id)}?allowLocalTrains=true&allowSuburbanTrains=true`)
 		.then(res => res.json())
 		.then(async results => {
 			const resultsWithLocations = results.map(r => ({
