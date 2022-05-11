@@ -104,6 +104,7 @@ const map = new mapboxGl.Map({
 	attributionControl: true,
 	customAttribution: [
 		'<b><i><a href="https://gist.github.com/juliuste/f9776a6b7925bc6cc2d52225dd83336e">Why are some trains missing?</a></i></b>',
+		'<b><a href="https://github.com/sponsors/juliuste">Donate</a></b>',
 		'<b><a href="https://github.com/juliuste/direkt.bahn.guru">GitHub</a></b>',
 		'<b><a href="https://bahn.guru/impressum">Impressum</a></b>',
 	],
