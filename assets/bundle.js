@@ -25108,6 +25108,8 @@ const { Duration } = require('luxon')
 const { match } = require('@formatjs/intl-localematcher')
 const { getUserLocales } = require('get-user-locale')
 
+const donationUrl = 'https://github.com/sponsors/juliuste?frequency=one-time'
+
 // todo: use a library for this
 const translations = {
 	baseTitle: {
@@ -25117,6 +25119,22 @@ const translations = {
 	searchPlaceholder: {
 		de: 'Station suchen…',
 		en: 'Search for a station…',
+	},
+	donationAlertTitle: {
+		de: 'Dieses Projekt unterstützen',
+		en: 'Support this project',
+	},
+	donationAlertMessage: {
+		de: 'Dieses Projekt wird ehrenamtlich von Open-Source-Softwareentwickler:innen betrieben, und macht aufgrund der Kosten für Server und Kartografie-Kacheln jeden Monat Verluste. Wir wären daher über jede Spende sehr dankbar!',
+		en: 'This project is maintained by open source developers in their spare time, who also use their private funds to cover operational costs for servers and map tiles. We are grateful for any donation!',
+	},
+	donationAlertSkip: {
+		de: 'Vielleicht später',
+		en: 'Maybe later',
+	},
+	donationAlertContinue: {
+		de: 'Jetzt spenden',
+		en: 'Donate now',
 	},
 	redirectionAlertTitle: {
 		de: 'Verbindungsdetails',
@@ -25201,7 +25219,7 @@ const map = new mapboxGl.Map({
 	attributionControl: true,
 	customAttribution: [
 		'<b><i><a href="https://gist.github.com/juliuste/f9776a6b7925bc6cc2d52225dd83336e">Why are some trains missing?</a></i></b>',
-		'<b><a href="https://github.com/sponsors/juliuste">Donate</a></b>',
+		`<b><a href="${donationUrl}">Donate</a></b>`,
 		'<b><a href="https://github.com/juliuste/direkt.bahn.guru">GitHub</a></b>',
 		'<b><a href="https://bahn.guru/impressum">Impressum</a></b>',
 	],
@@ -25243,6 +25261,7 @@ map.addControl(geocoder)
 
 let popupOpenSince = null
 let popupOpenFor = null
+let successfulSearches = 0
 const selectLocation = async id => {
 	const origin = await stationById(id)
 	if (!origin) {
@@ -25377,6 +25396,8 @@ const selectLocation = async id => {
 				error.code = 'NO_RESULTS'
 				throw error
 			}
+
+			successfulSearches += 1
 		})
 }
 
@@ -25394,7 +25415,21 @@ const onSelectLocation = async id => {
 	})
 
 	await selectLocation(id)
-		.then(() => Sweetalert.close())
+		.then(async () => {
+			if (successfulSearches !== 3) return Sweetalert.close()
+			// show donation request once, after the user already completed three searches successfully
+			const { isConfirmed } = await Sweetalert.fire({
+				title: translate('donationAlertTitle'),
+				text: translate('donationAlertMessage'),
+				showDenyButton: true,
+				denyButtonText: translate('donationAlertSkip'),
+				denyButtonColor: '#333333',
+				showConfirmButton: true,
+				confirmButtonText: translate('donationAlertContinue'),
+				confirmButtonColor: '#3085d6',
+			})
+			if (isConfirmed) window.open(donationUrl, 'target_' + donationUrl)
+		})
 		.catch(error => {
 			Sweetalert.disableLoading()
 			if (error.code === 'STATION_NOT_FOUND') {
