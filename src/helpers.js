@@ -86,7 +86,7 @@ const toPoint = (station) => ({
 })
 
 const isLongDistanceOrRegionalOrSuburban = s => {
-	return s.products && (s.products.nationalExp || s.products.national || s.products.regionalExp || s.products.regional || s.products.suburban) && isUicLocationCode(formatStationId(s.id))
+	return s.products && (s.products.nationalExp || s.products.nationalExpress || s.products.national || s.products.regionalExp || s.products.regionalExpress || s.products.regional || s.products.suburban) && isUicLocationCode(formatStationId(s.id))
 }
 
 const isRegion = s => {
