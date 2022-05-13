@@ -15,28 +15,28 @@
 		"test": "npm run lint && npm run check-deps && npm run build"
 	},
 	"dependencies": {
-		"@formatjs/intl-localematcher": "^0.2.21",
-		"@mapbox/mapbox-gl-geocoder": "^4.7.1",
-		"eslint-plugin-node": "^11.1.0",
+		"@formatjs/intl-localematcher": "^0.2.25",
+		"@mapbox/mapbox-gl-geocoder": "^4.7.4",
 		"fetch-ponyfill": "^7.1.0",
 		"get-user-locale": "^1.4.0",
-		"i18n-iso-countries": "^6.7.0",
+		"i18n-iso-countries": "^7.4.0",
 		"is-uic-location-code": "0.0.1",
 		"lodash": "^4.17.21",
-		"luxon": "^1.27.0",
-		"mapbox-gl": "^2.5.1",
-		"query-string": "^7.0.0",
+		"luxon": "^2.4.0",
+		"mapbox-gl": "^2.8.2",
+		"query-string": "^7.1.1",
 		"querystate": "^1.0.9",
-		"sweetalert2": "^11.0.16",
+		"sweetalert2": "^11.4.14",
 		"uic-codes": "^0.3.0"
 	},
 	"devDependencies": {
 		"browserify": "^17.0.0",
-		"depcheck": "^1.4.1",
-		"eslint": "^7.27.0",
-		"eslint-config-standard": "^16.0.3",
-		"eslint-plugin-import": "^2.23.4",
-		"eslint-plugin-promise": "^5.1.0"
+		"depcheck": "^1.4.3",
+		"eslint": "^8.15.0",
+		"eslint-config-standard": "^17.0.0",
+		"eslint-plugin-import": "^2.26.0",
+		"eslint-plugin-n": "^15.2.0",
+		"eslint-plugin-promise": "^6.0.0"
 	},
 	"engines": {
 		"node": ">=14"
