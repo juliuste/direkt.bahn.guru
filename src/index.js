@@ -14,6 +14,7 @@ const { getUserLocales } = require('get-user-locale')
 const donationUrl = 'https://github.com/sponsors/juliuste?frequency=one-time'
 
 // todo: use a library for this
+// when adding a language, also add the locale for it in helpers.js
 const translations = {
 	baseTitle: {
 		de: '🇪🇺 Zug-Direktverbindungen',
@@ -157,7 +158,7 @@ const geocoder = new MapboxGeocoder({
 	externalGeocoder: async (query) => {
 		const results = await (fetchStation(query).then(res => res.json()))
 		const filteredResults = results.filter(x => isLongDistanceOrRegionalOrSuburban(x) && !isRegion(x) && hasLocation(x))
-		return filteredResults.map(toPoint)
+		return filteredResults.map(toPoint(language))
 	},
 })
 map.addControl(geocoder)

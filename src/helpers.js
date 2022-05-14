@@ -3,7 +3,8 @@ const { stringify } = require('query-string')
 const isUicLocationCode = require('is-uic-location-code')
 const { toISO } = require('uic-codes')
 const countries = require('i18n-iso-countries')
-const countryLocale = require('i18n-iso-countries/langs/en.json')
+const enLocale = require('i18n-iso-countries/langs/en.json')
+const deLocale = require('i18n-iso-countries/langs/de.json')
 
 const fetchStation = async (query) => {
 	return Promise.race([
@@ -12,16 +13,17 @@ const fetchStation = async (query) => {
 	])
 }
 
-countries.registerLocale(countryLocale)
+countries.registerLocale(enLocale)
+countries.registerLocale(deLocale)
 
 const formatStationId = i => (i.length === 9 && i.slice(0, 2)) ? i.slice(2) : i
-const countryForStationId = _i => {
+const countryForStationId = (_i, language) => {
 	const i = formatStationId(_i)
 	if (!isUicLocationCode(i)) return undefined
 	const countryPrefix = +i.slice(0, 2)
 	const alpha3 = toISO[countryPrefix]
 	if (!alpha3) return undefined
-	return countries.getName(alpha3, 'en', { select: 'official' })
+	return countries.getName(alpha3, language, { select: 'official' }) || countries.getName(alpha3, 'en', { select: 'official' })
 }
 
 const stationById = async id => {
@@ -70,13 +72,13 @@ const buildLink = (origin, destination) => {
 	return `https://bahn.guru/calendar?${stringify(query)}`
 }
 
-const toPoint = (station) => ({
+const toPoint = language => station => ({
 	center: [station.location.longitude, station.location.latitude],
 	geometry: {
 		type: 'Point',
 		coordinates: [station.location.longitude, station.location.latitude],
 	},
-	place_name: [station.name, countryForStationId(station.id)].filter(Boolean).join(', '),
+	place_name: [station.name, countryForStationId(station.id, language)].filter(Boolean).join(', '),
 	place_type: ['coordinate'],
 	properties: {
 		id: station.id,
