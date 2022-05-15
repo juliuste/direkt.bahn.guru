@@ -6,7 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [14.x]
+        node-version: [16.x]
     steps:
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
@@ -24,10 +24,10 @@ jobs:
     steps:
     - name: Checkout main
       uses: actions/checkout@v2
-    - name: Use Node.js 14
+    - name: Use Node.js 16
       uses: actions/setup-node@v1
       with:
-        node-version: 14
+        node-version: 16
     - run: npm i
     - run: npm run build
     - run: mkdir -p target
