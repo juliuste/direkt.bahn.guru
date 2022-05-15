@@ -1,12 +1,11 @@
-const { fetch } = require('fetch-ponyfill')()
-const { stringify } = require('query-string')
-const isUicLocationCode = require('is-uic-location-code')
-const { toISO } = require('uic-codes')
-const countries = require('i18n-iso-countries')
-const enLocale = require('i18n-iso-countries/langs/en.json')
-const deLocale = require('i18n-iso-countries/langs/de.json')
+import { stringify } from 'query-string'
+import isUicLocationCode from 'is-uic-location-code'
+import { toISO } from 'uic-codes'
+import countries from 'i18n-iso-countries'
+import enLocale from 'i18n-iso-countries/langs/en.json'
+import deLocale from 'i18n-iso-countries/langs/de.json'
 
-const fetchStation = async (query) => {
+export const fetchStation = async (query) => {
 	return Promise.race([
 		fetch(`https://v5.db.transport.rest/locations?query=${query}&poi=false&addresses=false`),
 		fetch(`https://v5.db.juliustens.eu/locations?query=${query}&poi=false&addresses=false`),
@@ -16,7 +15,7 @@ const fetchStation = async (query) => {
 countries.registerLocale(enLocale)
 countries.registerLocale(deLocale)
 
-const formatStationId = i => (i.length === 9 && i.slice(0, 2)) ? i.slice(2) : i
+export const formatStationId = i => (i.length === 9 && i.slice(0, 2)) ? i.slice(2) : i
 const countryForStationId = (_i, language) => {
 	const i = formatStationId(_i)
 	if (!isUicLocationCode(i)) return undefined
@@ -26,14 +25,14 @@ const countryForStationId = (_i, language) => {
 	return countries.getName(alpha3, language, { select: 'official' }) || countries.getName(alpha3, 'en', { select: 'official' })
 }
 
-const stationById = async id => {
+export const stationById = async id => {
 	const candidates = await (fetchStation(id).then(res => res.json()))
 	return candidates.find(s => (formatStationId(s.id) === formatStationId(id)) && formatStationId(id) && s.location)
 }
 
-const locationToPoint = location => ({ type: 'Point', coordinates: [location.longitude, location.latitude] })
+export const locationToPoint = location => ({ type: 'Point', coordinates: [location.longitude, location.latitude] })
 
-const durationCategory = d => {
+export const durationCategory = d => {
 	if (d === 0) return 0
 	if (!d) return -1
 	if (d > 0 && d <= 60) return 1
@@ -44,7 +43,7 @@ const durationCategory = d => {
 	return 6
 }
 
-const durationCategoryColour = c => {
+export const durationCategoryColour = c => {
 	if (c === -1) return '#999' // unknown duration
 	if (c === 0) return '#333' // 0
 	if (c === 1) return '#191' // < 1h
@@ -56,7 +55,7 @@ const durationCategoryColour = c => {
 	return '#999'
 }
 
-const buildLink = (origin, destination) => {
+export const buildLink = (origin, destination) => {
 	const query = {
 		origin: origin.name,
 		destination: destination.name,
@@ -72,7 +71,7 @@ const buildLink = (origin, destination) => {
 	return `https://bahn.guru/calendar?${stringify(query)}`
 }
 
-const toPoint = language => station => ({
+export const toPoint = language => station => ({
 	center: [station.location.longitude, station.location.latitude],
 	geometry: {
 		type: 'Point',
@@ -87,28 +86,14 @@ const toPoint = language => station => ({
 	type: 'Feature',
 })
 
-const isLongDistanceOrRegionalOrSuburban = s => {
+export const isLongDistanceOrRegionalOrSuburban = s => {
 	return s.products && (s.products.nationalExp || s.products.nationalExpress || s.products.national || s.products.regionalExp || s.products.regionalExpress || s.products.regional || s.products.suburban) && isUicLocationCode(formatStationId(s.id))
 }
 
-const isRegion = s => {
+export const isRegion = s => {
 	return s.name.toUpperCase() === s.name
 }
 
-const hasLocation = s => {
+export const hasLocation = s => {
 	return !!s.location
-}
-
-module.exports = {
-	fetchStation,
-	formatStationId,
-	stationById,
-	locationToPoint,
-	durationCategory,
-	durationCategoryColour,
-	buildLink,
-	toPoint,
-	isLongDistanceOrRegionalOrSuburban,
-	isRegion,
-	hasLocation,
 }

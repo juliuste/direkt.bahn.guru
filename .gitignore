@@ -9,4 +9,4 @@ yarn.lock
 shrinkwrap.yaml
 pnpm-lock.yaml
 dist
-assets/bundle.js
+assets/bundle.*

@@ -1,15 +1,30 @@
 'use strict'
 
-const { fetch } = require('fetch-ponyfill')()
-const Sweetalert = require('sweetalert2')
-const mapboxGl = require('mapbox-gl')
-const MapboxGeocoder = require('@mapbox/mapbox-gl-geocoder')
-const sortBy = require('lodash/sortBy')
-const queryState = require('querystate')()
-const { Duration } = require('luxon')
+import Sweetalert from 'sweetalert2'
+import mapboxGl from 'mapbox-gl'
+import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder'
+import { sortBy } from 'lodash'
+import getQueryState from 'querystate'
+import { Duration } from 'luxon'
 
-const { match } = require('@formatjs/intl-localematcher')
-const { getUserLocales } = require('get-user-locale')
+import { match } from '@formatjs/intl-localematcher'
+import { getUserLocales } from 'get-user-locale'
+
+import {
+	formatStationId,
+	stationById,
+	locationToPoint,
+	durationCategory,
+	durationCategoryColour,
+	buildLink,
+	toPoint,
+	isLongDistanceOrRegionalOrSuburban,
+	isRegion,
+	hasLocation,
+	fetchStation,
+} from './helpers.js'
+
+const queryState = getQueryState()
 
 const donationUrl = 'https://github.com/sponsors/juliuste?frequency=one-time'
 
@@ -99,20 +114,6 @@ const translate = token => {
 	if (!translation) { console.error(`missing translation for token ${token} in language ${language}`); return translation.en || token }
 	return translationForLanguage
 }
-
-const {
-	formatStationId,
-	stationById,
-	locationToPoint,
-	durationCategory,
-	durationCategoryColour,
-	buildLink,
-	toPoint,
-	isLongDistanceOrRegionalOrSuburban,
-	isRegion,
-	hasLocation,
-	fetchStation,
-} = require('./helpers')
 
 mapboxGl.accessToken = 'pk.eyJ1IjoianVsaXVzdGUiLCJhIjoiY2t2N3UyeDZ2MjdqZjJvb3ZmcWNyc2QxbSJ9.oB7xzSTcmeDMcl4DhjSl0Q'
 const map = new mapboxGl.Map({
