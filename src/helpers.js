@@ -1,4 +1,3 @@
-import { stringify } from 'query-string'
 import isUicLocationCode from 'is-uic-location-code'
 import { toISO } from 'uic-codes'
 import countries from 'i18n-iso-countries'
@@ -53,22 +52,6 @@ export const durationCategoryColour = c => {
 	if (c === 5) return '#d41' // 8h-16h
 	if (c === 6) return '#a41' // > 16h
 	return '#999'
-}
-
-export const buildLink = (origin, destination) => {
-	const query = {
-		origin: origin.name,
-		destination: destination.name,
-		submit: 'Suchen',
-		class: 2,
-		bc: 0,
-		departureAfter: null,
-		arrivalBefore: null,
-		duration: null,
-		maxChanges: 0,
-		weeks: 4,
-	}
-	return `https://bahn.guru/calendar?${stringify(query)}`
 }
 
 export const toPoint = language => station => ({

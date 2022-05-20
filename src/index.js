@@ -16,7 +16,6 @@ import {
 	locationToPoint,
 	durationCategory,
 	durationCategoryColour,
-	buildLink,
 	toPoint,
 	isLongDistanceOrRegionalOrSuburban,
 	isRegion,
@@ -60,16 +59,20 @@ const translations = {
 		en: 'Connection details',
 	},
 	redirectionAlertMessage: {
-		de: 'Du wirst auf den Bahn-Preiskalender für die gewählte Verbindung weitergeleitet. Bitte beachte, dass du dort nur Preise für von der DB beworbene Fernverkehrsverbindungen findest, für alle anderen Verbindungen suche bitte auf den Seiten der lokalen Betreiber.',
-		en: 'You will be forwarded to a price overview for the connection you selected. Please note that this page only includes prices for tickes sold by DB Fernverkehr. Please check the corresponding vendor\'s website for all other connections.',
+		de: 'Du kannst dir die gewählte Zugverbindung auf der Website der Deutschen Bahn anschauen, oder dich zum Preiskalender für diese Strecke weiterleiten lassen. Bitte beachte, dass der Kalender leider nur für von der DB beworbene Fernverkehrsverbindungen funktioniert, für alle anderen Verbindungen informiere dich bitte auf den Seiten der lokalen Betreiber.',
+		en: 'You can check details for the selected train on the Deutsche Bahn (DB) website, or be forwarded to our price calendar for that route. Please note that the calendar only includes prices for tickes sold by DB Fernverkehr. Please check the corresponding vendor\'s website for all other connections.',
 	},
 	redirectionAlertCancel: {
 		de: 'Abbrechen',
 		en: 'Cancel',
 	},
-	redirectionAlertContinue: {
-		de: 'Öffnen',
-		en: 'Continue',
+	redirectionAlertCalendar: {
+		de: 'Preiskalender (beta)',
+		en: 'Price calendar (beta)',
+	},
+	redirectionAlertDb: {
+		de: 'Auf bahn.de zeigen',
+		en: 'Show on bahn.de',
 	},
 	loadingAlertTitle: {
 		de: 'Lädt…',
@@ -193,7 +196,7 @@ const selectLocation = async id => {
 		type: 'FeatureCollection',
 		features: [],
 	}
-	return fetch(`https://api.direkt.bahn.guru/${formatStationId(origin.id)}?allowLocalTrains=true&allowSuburbanTrains=true`)
+	return fetch(`https://api.direkt.bahn.guru/${formatStationId(origin.id)}?allowLocalTrains=true&allowSuburbanTrains=true?v=2`)
 		.then(res => res.json())
 		.then(async results => {
 			const resultsWithLocations = results.map(r => ({
@@ -208,7 +211,9 @@ const selectLocation = async id => {
 					name: r.name,
 					duration: durationCategory(r.duration),
 					durationMinutes: r.duration,
-					link: buildLink(origin, r),
+					calendarUrl: r.calendarUrl,
+					dbUrlGerman: r.dbUrlGerman,
+					dbUrlEnglish: r.dbUrlEnglish,
 				},
 			})), x => (-1) * x.properties.duration)
 			geojson.features = features
@@ -254,25 +259,33 @@ const selectLocation = async id => {
 			})
 
 			map.on('click', 'stations', async e => {
-				const link = e.features[0].properties.link
-				if (!(popupOpenSince && (+new Date() - (+popupOpenSince) > 50) && popupOpenFor === link)) return // @todo xD
-				const { dismiss } = await Sweetalert.fire({
+				const { dbUrlGerman, dbUrlEnglish, calendarUrl, type } = e.features[0].properties
+				if (type === 1) return // don't show popup when origin is clicked
+
+				console.log(e.features[0].properties)
+				if (!(popupOpenSince && (+new Date() - (+popupOpenSince) > 50) && popupOpenFor === dbUrlGerman)) return // @todo xD
+				const { isConfirmed, isDenied } = await Sweetalert.fire({
 					title: translate('redirectionAlertTitle'),
 					text: translate('redirectionAlertMessage'),
 					showCancelButton: true,
 					cancelButtonText: translate('redirectionAlertCancel'),
+					showDenyButton: true,
+					denyButtonText: translate('redirectionAlertCalendar'),
+					denyButtonColor: '#999999',
 					showConfirmButton: true,
-					confirmButtonText: translate('redirectionAlertContinue'),
+					confirmButtonText: translate('redirectionAlertDb'),
 					confirmButtonColor: '#3085d6',
 				})
-				if (!dismiss) {
-					if (link) window.open(link, 'target_' + link)
+				if (isConfirmed) {
+					if (language.toLowerCase() === 'de' && dbUrlGerman) window.open(dbUrlGerman, 'target_' + dbUrlGerman)
+					else if (dbUrlEnglish) window.open(dbUrlEnglish, 'target_' + dbUrlEnglish)
 				}
+				if (isDenied && calendarUrl) window.open(calendarUrl, 'target_' + calendarUrl)
 			})
 
 			map.on('mouseenter', 'stations', e => {
 				const coordinates = e.features[0].geometry.coordinates.slice()
-				const { name, duration, durationMinutes, link } = e.features[0].properties
+				const { name, duration, durationMinutes, dbUrlGerman } = e.features[0].properties
 
 				let durationElement = ''
 				if (Number.isInteger(durationMinutes)) {
@@ -282,7 +295,7 @@ const selectLocation = async id => {
 				}
 
 				popupOpenSince = new Date()
-				popupOpenFor = link
+				popupOpenFor = dbUrlGerman
 				popup.setLngLat(coordinates)
 					.setHTML(`${name}${durationElement}`)
 					.addTo(map)

@@ -24,7 +24,6 @@
 		"lodash": "^4.17.21",
 		"luxon": "^2.4.0",
 		"mapbox-gl": "^2.8.2",
-		"query-string": "^7.1.1",
 		"querystate": "^1.0.9",
 		"sweetalert2": "^11.4.14",
 		"uic-codes": "^0.3.0"
