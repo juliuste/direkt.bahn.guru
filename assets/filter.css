@@ -1,0 +1,48 @@
+/* based on https://github.com/el/filter-switch */
+
+.mapboxgl-filter-list
+{
+    display: none;
+}
+
+.mapboxgl-ctrl-group .mapboxgl-filter-list button
+{
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: block;
+    font-size: 14px;
+    padding: 8px 8px 6px;
+    text-align: right;
+    width: 100%;
+    height: auto;
+}
+
+.mapboxgl-filter-list button.active
+{
+    font-weight: bold;
+}
+
+.mapboxgl-filter-list button:hover
+{
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.mapboxgl-filter-list button + button
+{
+    border-top: 1px solid #ddd;
+}
+
+.mapboxgl-filter-switch
+{
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFoAAABaCAYAAAA4qEECAAAABmJLR0QA/wD/AP+gvaeTAAACKElEQVR4nO3cS2pUQRSA4V9ncQPqIIlZQ1rNRNFtKG5CFMRl+ICAj0G2oCiouA0fKzAKmknETGwHtxsFWzvV99apqu7/gzPpQefkBHJJ8xOQJEmSJElSK04AV4GnwEfgcDIfgCfAlXKrLY8t4C0wnjNvgHOFdmzeBeAL8488nc/AqMimDdukO9xxjzydfWCjwL7Nekn6kafzvMC+TTrP4keezk741n84BTwEDuj/jZSYH8BN4DRwBrgFHPV8z2/AA2Ctx13/slvwSEPMnRnf092B3ns38Zb/dBL4nukAUTPrIbc50HsfTm4094irahz5xY5z6J/AXu5FMrs+47UbA733Ht2NBrEG3Kd7AJT+NbDIHNE9AM9O5jb9H4ZfgXsM/DBsxYj+P5SL4Vs36gWLH/lZgX2btUH353TqkT8B6wX2bdqItM879oHtIpsugS3gNfOP/Ao/Jh3EZeAx8J7fH/y/Ax4BlwruJUmStITsLgLYXQSwuwhgdxHE7iJA891Fbrm7jhzdRe5psuvI2V3knqa6jpzdRe5pvusYl15gSLV0HddmvDZUd5FbU11Hju4i91TdddhdBLK7CGJ3EcjuIpDdRTC7C0mSpJVlBxLADiSAHUgAO5AgdiABVq4Dqe3/ddTQgTTZdaROTR1IU11H6tTUgTTfdaQal17gf2rpOlLV1IE01XWkTg0dSNVdRyo7kEB2IEHsQALZgQSyAwlmByJJkiRJklTYLw1F25Hu0KV3AAAAAElFTkSuQmCC); /* https://icons8.com/icon/69913/slider */
+	opacity: 0.5;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 70%;
+}
+
+.mapboxgl-filter-switch.active {
+	opacity: 1;
+	border-bottom: 1.5px solid #333; /* todo */
+}
