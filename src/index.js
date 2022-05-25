@@ -22,6 +22,7 @@ import {
 	hasLocation,
 	fetchStation,
 } from './helpers.js'
+import { MapboxFilterControl } from './filter.js'
 
 const queryState = getQueryState()
 
@@ -37,6 +38,14 @@ const translations = {
 	searchPlaceholder: {
 		de: 'Station suchen…',
 		en: 'Search for a station…',
+	},
+	filterAllTrains: {
+		de: 'Alle Züge',
+		en: 'All trains',
+	},
+	filterRegionalTrains: {
+		de: 'Nur Nahverkehr',
+		en: 'Local and regional trains',
 	},
 	donationAlertTitle: {
 		de: 'Dieses Projekt unterstützen',
@@ -61,6 +70,10 @@ const translations = {
 	redirectionAlertMessage: {
 		de: 'Du kannst dir die gewählte Zugverbindung auf der Website der Deutschen Bahn anschauen, oder dich zum Preiskalender für diese Strecke weiterleiten lassen. Bitte beachte, dass der Kalender leider nur für von der DB beworbene Fernverkehrsverbindungen funktioniert, für alle anderen Verbindungen informiere dich bitte auf den Seiten der lokalen Betreiber.',
 		en: 'You can check details for the selected train on the Deutsche Bahn (DB) website, or be forwarded to our price calendar for that route. Please note that the calendar only includes prices for tickes sold by DB Fernverkehr. Please check the corresponding vendor\'s website for all other connections.',
+	},
+	redirectionAlertLocalTrainWarning: {
+		de: 'Bitte beachte außerdem, dass aus technischen Gründen einige Züge fälschlicherweise als Teil des Nahverkehrs angezeigt werden können, obwohl dort keine Nahverkehrstickets gelten (z.B. Flixtrain). Bitte beachte dazu auch die Hinweise auf bahn.de!',
+		en: 'Furthermore, beware that (for technical reasons) some trains might be incorrectly categorized as local transit, even though local/regional fares don\'t apply (e.g. Flixtrain). Please refer to bahn.de for additional information!',
 	},
 	redirectionAlertCancel: {
 		de: 'Abbrechen',
@@ -170,7 +183,7 @@ map.addControl(geocoder)
 let popupOpenSince = null
 let popupOpenFor = null
 let successfulSearches = 0
-const selectLocation = async id => {
+const selectLocation = async (id, local) => {
 	const origin = await stationById(id)
 	if (!origin) {
 		const error = new Error('Station not found.')
@@ -196,7 +209,7 @@ const selectLocation = async id => {
 		type: 'FeatureCollection',
 		features: [],
 	}
-	return fetch(`https://api.direkt.bahn.guru/${formatStationId(origin.id)}?allowLocalTrains=true&allowSuburbanTrains=true?v=2`)
+	return fetch(`https://api.direkt.bahn.guru/${formatStationId(origin.id)}?localTrainsOnly=${local ? 'true' : 'false'}&v=4`)
 		.then(res => res.json())
 		.then(async results => {
 			const resultsWithLocations = results.map(r => ({
@@ -266,7 +279,9 @@ const selectLocation = async id => {
 				if (!(popupOpenSince && (+new Date() - (+popupOpenSince) > 50) && popupOpenFor === dbUrlGerman)) return // @todo xD
 				const { isConfirmed, isDenied } = await Sweetalert.fire({
 					title: translate('redirectionAlertTitle'),
-					text: translate('redirectionAlertMessage'),
+					html: local
+						? [translate('redirectionAlertMessage'), translate('redirectionAlertLocalTrainWarning')].join('<br><br>')
+						: translate('redirectionAlertMessage'),
 					showCancelButton: true,
 					cancelButtonText: translate('redirectionAlertCancel'),
 					showDenyButton: true,
@@ -319,7 +334,7 @@ const selectLocation = async id => {
 		})
 }
 
-const onSelectLocation = async id => {
+const onSelectLocation = async (id, local) => {
 	Sweetalert.fire({
 		title: translate('loadingAlertTitle'),
 		text: translate('loadingAlertMessage'),
@@ -332,7 +347,7 @@ const onSelectLocation = async id => {
 		showCancelButton: false,
 	})
 
-	await selectLocation(id)
+	await selectLocation(id, local)
 		.then(async () => {
 			if (successfulSearches !== 3) return Sweetalert.close()
 			// show donation request once, after the user already completed three searches successfully
@@ -361,14 +376,28 @@ const onSelectLocation = async id => {
 		})
 }
 
+const localTransitOnly = () => queryState.get('local') === 'true'
+const selectedOrigin = () => queryState.get('origin')
+
 geocoder.on('result', item => {
 	const { properties } = item.result
 	const id = formatStationId(properties.id)
 	queryState.set('origin', id)
-	onSelectLocation(id)
+	onSelectLocation(id, localTransitOnly())
 })
 
 map.on('load', () => {
-	const selectedOrigin = queryState.get('origin')
-	if (selectedOrigin) onSelectLocation(selectedOrigin)
+	const origin = selectedOrigin()
+	if (origin) onSelectLocation(origin, localTransitOnly())
 })
+
+map.addControl(new MapboxFilterControl([
+	{ id: 'all', title: translate('filterAllTrains'), isActive: !localTransitOnly() },
+	{ id: 'regional-only', title: translate('filterRegionalTrains'), isActive: localTransitOnly() },
+], 'all', (id) => {
+	const local = (id === 'regional-only')
+	if (local) queryState.set('local', 'true')
+	else queryState.remove('local')
+	const origin = selectedOrigin()
+	if (origin) onSelectLocation(origin, local)
+}))

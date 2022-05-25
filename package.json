@@ -5,7 +5,7 @@
 	"homepage": "https://github.com/juliuste/direkt.bahn.guru",
 	"bugs": "https://github.com/juliuste/direkt.bahn.guru/issues",
 	"repository": "juliuste/direkt.bahn.guru",
-	"license": "ISC",
+	"license": "GPL-3.0",
 	"author": "Julius Tens <mail@juliustens.eu>",
 	"type": "module",
 	"scripts": {
