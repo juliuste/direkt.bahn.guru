@@ -349,7 +349,7 @@ const onSelectLocation = async (id, local) => {
 
 	await selectLocation(id, local)
 		.then(async () => {
-			if (successfulSearches !== 3) return Sweetalert.close()
+			if (successfulSearches !== 4) return Sweetalert.close()
 			// show donation request once, after the user already completed three searches successfully
 			const { isConfirmed } = await Sweetalert.fire({
 				title: translate('donationAlertTitle'),
