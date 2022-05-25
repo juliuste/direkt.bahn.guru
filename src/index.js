@@ -3,6 +3,7 @@
 import Sweetalert from 'sweetalert2'
 import mapboxGl from 'mapbox-gl'
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder'
+import { encode } from 'he'
 import { sortBy } from 'lodash'
 import getQueryState from 'querystate'
 import { Duration } from 'luxon'
@@ -194,7 +195,7 @@ const selectLocation = async (id, local) => {
 	geocoder.setInput('')
 
 	const pageTitle = document.querySelector('title')
-	if (origin.name) pageTitle.innerHTML = [origin.name, translate('baseTitle')].join(' | ')
+	if (origin.name) pageTitle.innerHTML = [encode(origin.name), translate('baseTitle')].join(' | ')
 	const stationFeature = {
 		type: 'feature',
 		geometry: locationToPoint(origin.location),
