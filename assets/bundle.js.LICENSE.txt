@@ -2,6 +2,8 @@
 
 /*! https://mths.be/he v1.2.0 by @mathias | MIT license */
 
+/*! ieee754. BSD-3-Clause License. Feross Aboukhadijeh <https://feross.org/opensource> */
+
 /**
  * @license
  * Lodash <https://lodash.com/>
