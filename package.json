@@ -16,7 +16,7 @@
 		"test": "npm run lint && npm run check-deps && npm run build"
 	},
 	"dependencies": {
-		"@formatjs/intl-localematcher": "^0.2.25",
+		"@formatjs/intl-localematcher": "^0.3.0",
 		"@mapbox/mapbox-gl-geocoder": "^4.7.4",
 		"get-user-locale": "^1.4.0",
 		"he": "^1.2.0",
