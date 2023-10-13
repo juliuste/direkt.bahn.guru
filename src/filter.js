@@ -1,88 +1,116 @@
 // based on https://github.com/el/filter-switch
 
+import { translate } from './translations.js'
+
 export class MapboxFilterControl {
-	entries = []
-	defaultEntry = null
-	constructor (entries, defaultEntry, onChange) {
-		this.entries = entries
-		this.defaultEntry = defaultEntry
+	trainTypes = []
+
+	constructor (onChange, filters) {
 		this.onChange = onChange.bind(this)
+		this.filters = filters
 		this.onDocumentClick = this.onDocumentClick.bind(this)
 	}
 
 	getDefaultPosition () { return 'top-right' }
 
 	onAdd (map) {
+		document.addEventListener('click', this.onDocumentClick)
+
 		this.map = map
-		this.controlContainer = document.createElement('div')
-		this.controlContainer.classList.add('mapboxgl-ctrl')
-		this.controlContainer.classList.add('mapboxgl-ctrl-group')
-		this.mapStyleContainer = document.createElement('div')
-		this.entryButton = document.createElement('button')
-		this.entryButton.type = 'button'
-		this.mapStyleContainer.classList.add('mapboxgl-filter-list')
 
-		const activeEntry = this.entries.find(e => e.isActive)
-		const activeIsDefault = activeEntry && (activeEntry.id === this.defaultEntry)
+		this.controls = document.createElement('div')
+		this.controls.classList.add('mapboxgl-ctrl')
+		this.controls.classList.add('mapboxgl-ctrl-group')
 
-		for (const entry of this.entries) {
-			const entryElement = document.createElement('button')
-			entryElement.type = 'button'
-			entryElement.innerText = entry.title
-			entryElement.classList.add(entry.title.replace(/[^a-z0-9-]/gi, '_'))
-			entryElement.dataset.id = entry.id
-			entryElement.addEventListener('click', event => {
+		this.settingsButton = document.createElement('button')
+		this.settingsButton.type = 'button'
+		this.settingsButton.classList.add('mapboxgl-ctrl-icon')
+		this.settingsButton.classList.add('mapboxgl-filter-switch')
+		this.settingsButton.addEventListener('click', event => { this.openModal() })
+		this.controls.appendChild(this.settingsButton)
+
+		this.controlsContainer = document.createElement('div')
+		this.controlsContainer.classList.add('mapboxgl-filter-container')
+		this.controls.appendChild(this.controlsContainer)
+
+		this.createChoiceList('trainTypes', this.filters.trainTypes)
+		this.createInput('maxDuration', this.filters.maxDuration)
+
+		return this.controls
+	}
+
+	createChoiceList (choiceType, choices) {
+		const containerElem = document.createElement('div')
+		containerElem.classList.add('mapboxgl-filter-list')
+		this.controlsContainer.appendChild(containerElem)
+		const titleElem = document.createElement('h3')
+		titleElem.innerText = translate(choiceType)
+		containerElem.appendChild(titleElem)
+
+		for (const choice of choices) {
+			const elem = document.createElement('button')
+			elem.type = 'button'
+			elem.innerText = choice.title
+			elem.classList.add(choice.title.replace(/[^a-z0-9-]/gi, '_'))
+			elem.dataset.id = choice.id
+			elem.addEventListener('click', event => {
 				const srcElement = event.srcElement
-				this.closeModal()
 				if (srcElement.classList.contains('active')) return
 
-				this.onChange(entryElement.dataset.id)
-				if (entryElement.dataset.id !== this.defaultEntry) this.entryButton.classList.add('active')
-				else this.entryButton.classList.remove('active')
+				this.onChange({ [choiceType]: elem.dataset.id })
 
-				const elms = this.mapStyleContainer.getElementsByClassName('active')
+				const elms = containerElem.getElementsByClassName('active')
 				while (elms[0]) elms[0].classList.remove('active')
 				srcElement.classList.add('active')
 			})
-			if (entry.isActive) entryElement.classList.add('active')
-			this.mapStyleContainer.appendChild(entryElement)
+			if (choice.isActive) elem.classList.add('active')
+			containerElem.appendChild(elem)
 		}
+	}
 
-		this.entryButton.classList.add('mapboxgl-ctrl-icon')
-		this.entryButton.classList.add('mapboxgl-filter-switch')
-		if (!activeIsDefault) this.entryButton.classList.add('active')
-		this.entryButton.addEventListener('click', event => { this.openModal() })
-
-		document.addEventListener('click', this.onDocumentClick)
-
-		this.controlContainer.appendChild(this.entryButton)
-		this.controlContainer.appendChild(this.mapStyleContainer)
-		return this.controlContainer
+	createInput (type, params) {
+		const containerElem = document.createElement('div')
+		containerElem.classList.add('mapboxgl-filter-list')
+		this.controlsContainer.appendChild(containerElem)
+		const inputElem = document.createElement('input')
+		for (const [param, value] of Object.entries(params)) {
+			inputElem[param] = value
+		}
+		inputElem.name = type
+		inputElem.classList.add('mapboxgl-ctrl-input')
+		const labelElem = document.createElement('label')
+		labelElem.innerText = translate(type)
+		labelElem.for = type
+		inputElem.addEventListener('change', event => {
+			this.onChange({ [type]: event.target.value })
+		})
+		containerElem.appendChild(labelElem)
+		containerElem.appendChild(inputElem)
 	}
 
 	onRemove () {
-		if (!this.controlContainer || !this.controlContainer.parentNode || !this.map || !this.entryButton) return
-		this.entryButton.removeEventListener('click', this.onDocumentClick)
-		this.controlContainer.parentNode.removeChild(this.controlContainer)
+		if (!this.controls || !this.controls.parentNode || !this.map || !this.settingsButton) return
+		this.settingsButton.removeEventListener('click', this.onDocumentClick)
+		this.controls.parentNode.removeChild(this.controls)
 		document.removeEventListener('click', this.onDocumentClick)
 		this.map = undefined
 	}
 
 	closeModal () {
-		if (this.mapStyleContainer && this.entryButton) {
-			this.mapStyleContainer.style.display = 'none'
-			this.entryButton.style.display = 'block'
+		if (this.controlsContainer && this.settingsButton) {
+			this.controlsContainer.style.display = 'none'
+			this.settingsButton.style.display = 'block'
 		}
 	}
 
 	openModal () {
-		if (this.mapStyleContainer && this.entryButton) {
-			this.mapStyleContainer.style.display = 'block'
-			this.entryButton.style.display = 'none'
+		if (this.controlsContainer && this.settingsButton) {
+			this.controlsContainer.style.display = 'block'
+			this.settingsButton.style.display = 'none'
 		}
 	}
 
 	onDocumentClick (event) {
-		if (this.controlContainer && !this.controlContainer.contains(event.target)) this.closeModal()
+		if (this.controls && !this.controls.contains(event.target)) this.closeModal()
 	}
 }

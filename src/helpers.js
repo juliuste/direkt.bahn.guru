@@ -3,6 +3,7 @@ import { toISO } from 'uic-codes'
 import countries from 'i18n-iso-countries'
 import enLocale from 'i18n-iso-countries/langs/en.json'
 import deLocale from 'i18n-iso-countries/langs/de.json'
+import frLocale from 'i18n-iso-countries/langs/fr.json'
 
 export const fetchStation = async (query) => {
 	return Promise.race([
@@ -13,6 +14,7 @@ export const fetchStation = async (query) => {
 
 countries.registerLocale(enLocale)
 countries.registerLocale(deLocale)
+countries.registerLocale(frLocale)
 
 export const formatStationId = i => (i.length === 9 && i.slice(0, 2)) ? i.slice(2) : i
 const countryForStationId = (_i, language) => {
@@ -26,7 +28,13 @@ const countryForStationId = (_i, language) => {
 
 export const stationById = async id => {
 	const candidates = await (fetchStation(id).then(res => res.json()))
-	return candidates.find(s => (formatStationId(s.id) === formatStationId(id)) && formatStationId(id) && s.location)
+	const matchingCandidate = candidates.find(s => (formatStationId(s.id) === formatStationId(id)) && formatStationId(id) && s.location)
+	if (!matchingCandidate) {
+		const error = new Error('Station not found.')
+		error.code = 'STATION_NOT_FOUND'
+		throw error
+	}
+	return matchingCandidate
 }
 
 export const locationToPoint = location => ({ type: 'Point', coordinates: [location.longitude, location.latitude] })

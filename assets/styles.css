@@ -1,10 +1,43 @@
 body {
-	margin: 0; padding: 0;
-	background-color: #333;
-	font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    margin: 0; padding: 0;
+    background-color: #333;
+    font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
 
 .mapboxgl-popup {
-	max-width: 250px;
-	font: 14px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    max-width: 250px;
+    font: 14px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
+
+.delete-icon {
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAYAAACohjseAAAACXBIWXMAAAsTAAALEwEAmpwYAAABLklEQVR4nO3aWQqDQBAE0Pou9f6XiSF7jpUgKISQREd7eiFdML9jPxCX7gEymUwmkxEJATSwTzPWIpphwx7AGUAnvXlhHXsAJwCtNO4xLivkhJvqEEG+46yQ77jXOtoaG2si52poa1+gi4yzRKrhLJDqOE2kGU4DaY6riXSDq4F0h5NEusVJIN3jtiDD4NYgw+FKkGFxU34BrgCOkXFLkOFxpciQuFfkt1tyWLfIuCXAu3GPR+UWvUREsvAhEwrJmdfEITKSC1/0fUQkCz/VQiG58mM7BJIbf5dcIyn0w+sSSeGWhSskKzWdXCBZuW1oiqRS49cESeXWvSqSRsMXFSSNx2dVkXQyAK2GpKMR9qc6TlIT3p0h7htS/KTFzskxkl4a9xcHgTKZTCbzl3kCMGXUuCrI4dYAAAAASUVORK5CYII=);  /* https://icons8.com delete-sign */
+    background-size: contain;
+    width: 20px;
+    height: 20px;
+    flex: 0 0 auto;
+    cursor: pointer;
+}
+
+.station-name {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    text-align: right;
+    margin-right: 5px;
+    border-radius: 4px;
+    font-size: 1.2em;
+    flex: 1 0 auto;
+}
+
+.station-container {
+    display: flex;
+    flex-direction: row;
+    padding: 5px;
+    background: white;
+    margin-bottom: 5px;
+}
+
+.station-control {
+    display: flex;
+    flex-direction: column;
 }
