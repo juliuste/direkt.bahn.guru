@@ -17,7 +17,7 @@
 	},
 	"dependencies": {
 		"@formatjs/intl-localematcher": "^0.2.25",
-		"@mapbox/mapbox-gl-geocoder": "^4.7.4",
+		"@mapbox/mapbox-gl-geocoder": "^5.0.0",
 		"get-user-locale": "^1.4.0",
 		"he": "^1.2.0",
 		"i18n-iso-countries": "^7.4.0",
